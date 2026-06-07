@@ -1,0 +1,254 @@
+{
+  "kpis": {
+    "totalLinks": 12,
+    "restrictedCount": 6,
+    "restrictedPercent": 50,
+    "topRiskCommodity": "Cobalt",
+    "topRiskScore": 94,
+    "alertLevel": "HIGH",
+    "dataAsOf": "2025-Q4 (Synthetic · UN Comtrade + USGS MRDS)"
+  },
+  "dependencies": [
+    {
+      "id": "link-01",
+      "source_country": "China",
+      "target_country": "USA",
+      "component": "Semiconductors",
+      "restricted": true,
+      "restrictionReason": "EAR Part 774 — Advanced Logic Chips",
+      "dataSource": "UN Comtrade (Synthetic)",
+      "riskScore": 88,
+      "riskDelta": "+12% above regional avg",
+      "source_coords": [104.1954, 35.8617],
+      "target_coords": [-95.7129, 37.0902],
+      "volume": 5200
+    },
+    {
+      "id": "link-02",
+      "source_country": "DRC",
+      "target_country": "China",
+      "component": "Cobalt",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 94,
+      "riskDelta": "+31% above regional avg",
+      "source_coords": [23.6401, -4.0383],
+      "target_coords": [104.1954, 35.8617],
+      "volume": 8400
+    },
+    {
+      "id": "link-03",
+      "source_country": "Australia",
+      "target_country": "USA",
+      "component": "Lithium",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 42,
+      "riskDelta": "-18% below regional avg",
+      "source_coords": [133.7751, -25.2744],
+      "target_coords": [-95.7129, 37.0902],
+      "volume": 3500
+    },
+    {
+      "id": "link-04",
+      "source_country": "Taiwan",
+      "target_country": "EU",
+      "component": "Advanced Microchips",
+      "restricted": true,
+      "restrictionReason": "ITAR — Dual-Use Technology",
+      "dataSource": "UN Comtrade (Synthetic)",
+      "riskScore": 79,
+      "riskDelta": "+9% above regional avg",
+      "source_coords": [120.9605, 23.6978],
+      "target_coords": [10.4515, 51.1657],
+      "volume": 4200
+    },
+    {
+      "id": "link-05",
+      "source_country": "Chile",
+      "target_country": "Japan",
+      "component": "Lithium",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 38,
+      "riskDelta": "-22% below regional avg",
+      "source_coords": [-71.5430, -35.6751],
+      "target_coords": [138.2529, 36.2048],
+      "volume": 2900
+    },
+    {
+      "id": "link-06",
+      "source_country": "China",
+      "target_country": "EU",
+      "component": "Rare Earth Elements",
+      "restricted": true,
+      "restrictionReason": "EAR — Strategic Material Controls",
+      "dataSource": "UN Comtrade (Synthetic)",
+      "riskScore": 91,
+      "riskDelta": "+28% above regional avg",
+      "source_coords": [104.1954, 35.8617],
+      "target_coords": [10.4515, 51.1657],
+      "volume": 6100
+    },
+    {
+      "id": "link-07",
+      "source_country": "Russia",
+      "target_country": "India",
+      "component": "Titanium",
+      "restricted": true,
+      "restrictionReason": "OFAC Sanctions — Controlled Entity",
+      "dataSource": "UN Comtrade (Synthetic)",
+      "riskScore": 85,
+      "riskDelta": "+22% above regional avg",
+      "source_coords": [105.3188, 61.5240],
+      "target_coords": [78.9629, 20.5937],
+      "volume": 3700
+    },
+    {
+      "id": "link-08",
+      "source_country": "South Africa",
+      "target_country": "USA",
+      "component": "Platinum Group Metals",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 55,
+      "riskDelta": "-5% below regional avg",
+      "source_coords": [22.9375, -30.5595],
+      "target_coords": [-95.7129, 37.0902],
+      "volume": 2100
+    },
+    {
+      "id": "link-09",
+      "source_country": "Canada",
+      "target_country": "USA",
+      "component": "Uranium",
+      "restricted": true,
+      "restrictionReason": "NRC 10 CFR Part 110 — Nuclear Export",
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 73,
+      "riskDelta": "+10% above regional avg",
+      "source_coords": [-96.8165, 56.1304],
+      "target_coords": [-95.7129, 37.0902],
+      "volume": 1800
+    },
+    {
+      "id": "link-10",
+      "source_country": "Malaysia",
+      "target_country": "USA",
+      "component": "Semiconductors",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "UN Comtrade (Synthetic)",
+      "riskScore": 48,
+      "riskDelta": "-12% below regional avg",
+      "source_coords": [109.6976, 4.2105],
+      "target_coords": [-95.7129, 37.0902],
+      "volume": 3100
+    },
+    {
+      "id": "link-11",
+      "source_country": "Kazakhstan",
+      "target_country": "China",
+      "component": "Uranium",
+      "restricted": false,
+      "restrictionReason": null,
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 61,
+      "riskDelta": "+3% above regional avg",
+      "source_coords": [66.9237, 48.0196],
+      "target_coords": [104.1954, 35.8617],
+      "volume": 4500
+    },
+    {
+      "id": "link-12",
+      "source_country": "Indonesia",
+      "target_country": "Japan",
+      "component": "Nickel",
+      "restricted": true,
+      "restrictionReason": "EAR — Battery-Grade Processing Controls",
+      "dataSource": "USGS MRDS (Synthetic)",
+      "riskScore": 76,
+      "riskDelta": "+14% above regional avg",
+      "source_coords": [113.9213, -0.7893],
+      "target_coords": [138.2529, 36.2048],
+      "volume": 5800
+    }
+  ],
+  "countryCompare": [
+    {
+      "country": "China",
+      "exportDominance": 88,
+      "vulnerability": 42,
+      "primaryExport": "Refined Minerals & REE"
+    },
+    {
+      "country": "USA",
+      "exportDominance": 65,
+      "vulnerability": 78,
+      "primaryExport": "IP & Software"
+    },
+    {
+      "country": "Taiwan",
+      "exportDominance": 75,
+      "vulnerability": 85,
+      "primaryExport": "Semiconductors"
+    },
+    {
+      "country": "EU",
+      "exportDominance": 55,
+      "vulnerability": 70,
+      "primaryExport": "Industrial Machinery"
+    },
+    {
+      "country": "Russia",
+      "exportDominance": 60,
+      "vulnerability": 55,
+      "primaryExport": "Titanium & Aerospace"
+    },
+    {
+      "country": "DRC",
+      "exportDominance": 70,
+      "vulnerability": 90,
+      "primaryExport": "Cobalt Ore"
+    }
+  ],
+  "insights": {
+    "whyThisMatters": "Export controls on critical materials — semiconductors, cobalt, rare earths — are the invisible rails that govern who can build AI chips, EV batteries, and advanced weapons systems. When these rails snap, entire industrial strategies stall. This map surfaces those chokepoints before they become crises.",
+    "whoControls": "China processes 60%+ of the world's critical minerals and manufactures the equipment to refine more. The US and allies control the IP layer — chip designs, EDA software, and fabrication know-how. Taiwan sits at the critical intersection, fabricating chips that neither side can replicate at scale."
+  },
+  "sourceLabels": [
+    { "id": "comtrade", "name": "UN Comtrade", "type": "Synthetic", "coverage": "Trade flow volumes, HS codes 28–29, 84–85", "color": "#38BDF8" },
+    { "id": "usgs", "name": "USGS MRDS", "type": "Synthetic", "coverage": "Mineral deposit locations, extraction volumes", "color": "#818CF8" },
+    { "id": "synthetic", "name": "Real Rails Synthetic", "type": "Synthetic", "coverage": "Supplier-customer links, restriction mappings", "color": "#4ade80" }
+  ],
+  "mitigations": [
+    {
+      "title": "Diversify Cobalt Refining",
+      "description": "DRC supplies 73% of raw cobalt ore but China refines 80% of it. Invest in allied processing facilities in Australia or Canada to break the single-point bottleneck.",
+      "severity": "HIGH",
+      "timeframe": "5–10 years"
+    },
+    {
+      "title": "Semiconductor Nearshoring",
+      "description": "Accelerate fab construction under CHIPS Act frameworks in US and EU to reduce existential dependency on Taiwan Strait stability.",
+      "severity": "CRITICAL",
+      "timeframe": "8–12 years"
+    },
+    {
+      "title": "Rare Earth Recycling Programs",
+      "description": "Urban mining of REEs from end-of-life electronics can reduce Chinese extraction dominance by up to 20% by 2035.",
+      "severity": "MEDIUM",
+      "timeframe": "3–7 years"
+    },
+    {
+      "title": "Lithium Alternative Chemistries",
+      "description": "R&D investment in Sodium-ion and Solid-State batteries to reduce dependency on traditional lithium supply chains controlled by 3 countries.",
+      "severity": "MEDIUM",
+      "timeframe": "4–8 years"
+    }
+  ]
+}
