@@ -4,7 +4,7 @@
 
 A geospatial intelligence **prototype** dashboard that maps global export-control dependency networks across critical minerals and dual-use technologies.
 
-> ⚠️ **Data status:** The dashboard currently runs entirely on **synthetic mock data** (`backend/mock_data.json`). The UN Comtrade public preview endpoint returns HTTP 403 without an API key, and the USGS MRDS WFS adapter has not been verified. Live API adapters are implemented in `backend/main.py` and will activate automatically once a valid Comtrade subscription key is configured. Risk scores and EAR/ITAR flags are formula-derived thresholds — they are **not** lookups against actual EAR/ITAR/OFAC regulatory databases.
+>  **Data status:** The dashboard currently runs entirely on **synthetic mock data** (`backend/mock_data.json`). The UN Comtrade public preview endpoint returns HTTP 403 without an API key, and the USGS MRDS WFS adapter has not been verified. Live API adapters are implemented in `backend/main.py` and will activate automatically once a valid Comtrade subscription key is configured. Risk scores and EAR/ITAR flags are formula-derived thresholds — they are **not** lookups against actual EAR/ITAR/OFAC regulatory databases.
 
 ---
 
@@ -174,21 +174,6 @@ Interactive API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## Frontend Layout — 70/30 Split
-
-```
-┌─────────────────────────────────────────┬──────────────┐
-│                                         │              │
-│           MapStage (70%)                │ Intelligence │
-│                                         │ Sidebar(30%) │
-│  • DeckGL ArcLayer (trade flow arcs)    │              │
-│  • ScatterplotLayer (country nodes)     │  KPIs        │
-│  • MapLibre dark-matter basemap         │  Filters     │
-│  • Click node → sidebar filter          │  Risk Chart  │
-│  • Hover arc → tooltip with metadata   │  Mitigations │
-│                                         │  Download    │
-└─────────────────────────────────────────┴──────────────┘
-```
 
 ### Interaction Model
 
@@ -241,18 +226,6 @@ Export Controls/
 
 ---
 
-## Design DNA
-
-| Token | Value |
-|-------|-------|
-| Background | `#030712` (strictly enforced in `:root`, `.dark`, and `body`) |
-| Primary accent | `#38BDF8` (cyan) |
-| Secondary accent | `#818CF8` (indigo) |
-| Danger | `#ef4444` (red) |
-| Surface | `#0B1117` |
-| Border | `#1F2937` |
-
----
 
 ## Caching Strategy
 
@@ -271,15 +244,3 @@ Request → Cache hit? → Return cached data (fast)
 
 ---
 
-## Glossary
-
-| Term | Meaning |
-|------|---------| 
-| **HS Code** | Harmonized System commodity classification (e.g., HS 85 = Semiconductors) |
-| **FOB Value** | Free On Board — export value at point of departure |
-| **MRDS** | Mineral Resources Data System (USGS) |
-| **WFS** | Web Feature Service — OGC standard for geospatial data |
-| **EAR** | Export Administration Regulations (US BIS) |
-| **ITAR** | International Traffic in Arms Regulations |
-| **OFAC** | Office of Foreign Assets Control (US Treasury) |
-| **REE** | Rare Earth Elements |
