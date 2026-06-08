@@ -39,16 +39,6 @@ A geospatial intelligence **prototype** dashboard that maps global export-contro
 
 ---
 
-## Prerequisites
-
-| Tool | Minimum Version | Check |
-|------|----------------|-------|
-| Python | 3.10+ | `python --version` |
-| pip | 23+ | `pip --version` |
-| Node.js | 18+ | `node --version` |
-| npm | 9+ | `npm --version` |
-
----
 
 ## Setup & Quick Start
 
@@ -135,9 +125,9 @@ npm run dev
 
 | Source | Intended Type | Current Status | Notes |
 |--------|--------------|----------------|-------|
-| **UN Comtrade** | Live | ❌ 403 — not active | Needs subscription key at `comtradeplus.un.org` |
-| **USGS MRDS** | Live (WFS) | ⚠️ Unverified | WFS endpoint may require map file path fixes |
-| **Mock Data** | Fallback | ✅ Active | `backend/mock_data.json` — 12 synthetic dependency links |
+| **UN Comtrade** | Live |  403 — not active | Needs subscription key at `comtradeplus.un.org` |
+| **USGS MRDS** | Live (WFS) |  Unverified | WFS endpoint may require map file path fixes |
+| **Mock Data** | Fallback |  Active | `backend/mock_data.json` — 12 synthetic dependency links |
 
 ---
 
