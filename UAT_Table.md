@@ -4,20 +4,22 @@
 | Field | Value |
 |-------|-------|
 | **Document Type** | User Acceptance Testing (UAT) |
-| **Prerequisite** | VAR Status = 🟢 GREEN (24/24 Pass) |
+| **Prerequisite** | VAR Status = 🟢 GREEN (24/24 Pass against synthetic mock data) |
 | **Tester Role** | Export Controls Analyst / QA |
 | **Environment** | Frontend `localhost:3000` + Backend `localhost:8000` |
-| **Data Sources** | UN Comtrade (Live) · USGS MRDS (Live) |
+| **Data Sources** | Real Rails Synthetic (`mock_data.json`) — Comtrade returns 403; USGS not verified |
 | **Reviewed Against** | `Dashboard.tsx` · `MapStage.tsx` · `IntelligenceSidebar.tsx` · `RiskChart.tsx` · `main.py` · `mock_data.json` |
 
 ---
 
 ## Data Source Authenticity & Scope Note
 
-* **UN Comtrade Public API Integration:** Ingests live global trade flow data (exports, volumes, values, periods) for critical HS Chapters (such as Copper, Nickel, Ores, Machinery).
-* **USGS Mineral Resources Data System (MRDS) WFS Integration:** Ingests live geographic coordinates and site names for critical mineral deposits (such as Cobalt, Lithium, Uranium, Rare earth elements).
-* **Caching & Fallback:** The backend caches live API results in memory for 30 minutes to manage API limits. If external live APIs are temporarily slow or offline, the app falls back gracefully to a synthetic local dataset (`mock_data.json`).
-* **Visualization Scope:** The underlying country-level statistics, mineral records, and trade volumes are real, while individual supplier-to-customer connection links are synthetic mockups used for geospatial simulation.
+> ⚠️ **Important:** This UAT was conducted against synthetic mock data. The UN Comtrade public preview API returns HTTP 403 (no API key configured), and USGS MRDS WFS integration was not verified. All dependency records, risk scores, and EAR/ITAR flags shown in the dashboard are served from `backend/mock_data.json`. Risk scores are formula-derived thresholds, not lookups against actual EAR/ITAR/OFAC regulatory databases.
+
+* **UN Comtrade Integration (not active):** Adapter code is present but API returns 403. Mock fallback is active.
+* **USGS MRDS Integration (not verified):** Adapter code is present; WFS endpoint not confirmed reachable. Mock fallback is active.
+* **Caching & Fallback:** The backend caches live API results in memory for 30 minutes. Since both live APIs are unavailable, all data is served from `mock_data.json`.
+* **Visualization Scope:** All supplier-to-customer connection links, risk scores, and restriction flags are synthetic. Country-level geographic coordinates are real; trade volumes and restriction classifications are not.
 
 ---
 

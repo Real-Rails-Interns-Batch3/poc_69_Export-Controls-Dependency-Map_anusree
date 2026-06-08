@@ -158,7 +158,7 @@ def fetch_comtrade_live() -> list:
                                 "target_country": partner_name,
                                 "component": commodity,
                                 "restricted": base_risk > 70,
-                                "restrictionReason": "EAR / ITAR — flagged by trade volume model" if base_risk > 70 else None,
+                                "restrictionReason": "EAR / ITAR — flagged by trade volume formula (synthetic)" if base_risk > 70 else None,
                                 "dataSource": "UN Comtrade (Live)",
                                 "riskScore": base_risk,
                                 "riskDelta": f"+{base_risk - 55}% vs avg" if base_risk > 55 else f"{base_risk - 55}% vs avg",
@@ -288,7 +288,7 @@ def fetch_usgs_live() -> list:
                         "target_country": tgt_country,
                         "component": label,
                         "restricted": risk > 70,
-                        "restrictionReason": f"NRC/EAR — Critical Mineral: {mineral}" if risk > 70 else None,
+                        "restrictionReason": f"NRC/EAR — Critical Mineral: {mineral} (formula-derived, not a regulatory lookup)" if risk > 70 else None,
                         "dataSource": "USGS MRDS (Live)",
                         "riskScore": risk,
                         "riskDelta": f"+{risk - 55}% above regional avg" if risk > 55 else f"{risk - 55}% below regional avg",
@@ -430,24 +430,24 @@ def get_source_labels():
         {
             "id": "comtrade",
             "name": "UN Comtrade",
-            "type": "Live",
-            "coverage": "Trade flow volumes, HS chapters 26–28, 74–75, 84–85, 90",
+            "type": "Fallback/Mock",
+            "coverage": "Trade flow volumes, HS chapters 26–28, 74–75, 84–85, 90 (live API returns 403 — mock data used)",
             "color": "#38BDF8",
             "endpoint": "comtradeapi.un.org/public/v1/preview",
         },
         {
             "id": "usgs",
             "name": "USGS MRDS",
-            "type": "Live",
-            "coverage": "Mineral deposit locations, extraction sites (mrds-high WFS layer)",
+            "type": "Fallback/Mock",
+            "coverage": "Mineral deposit locations, extraction sites — mock_data.json fallback active",
             "color": "#818CF8",
             "endpoint": "mrdata.usgs.gov/cgi-bin/mapserv (WFS 1.1.0)",
         },
         {
             "id": "synthetic",
             "name": "Real Rails Synthetic",
-            "type": "Fallback",
-            "coverage": "Supplier-customer links, restriction mappings (used when live APIs unavailable)",
+            "type": "Active",
+            "coverage": "Supplier-customer links, restriction mappings (mock_data.json — currently the only active data source)",
             "color": "#4ade80",
         },
     ]
@@ -468,7 +468,7 @@ def get_stats():
         "topRiskCommodity": top.get("component", "N/A"),
         "topRiskScore": top.get("riskScore", 0),
         "alertLevel": "HIGH" if restricted / max(total, 1) > 0.4 else "MEDIUM",
-        "dataAsOf": "2023–2024 (Live · UN Comtrade + USGS MRDS)",
+        "dataAsOf": "2023–2024 (Synthetic Mock · UN Comtrade + USGS MRDS fallback)",
         "sources": {
             "comtrade_records": sum(1 for d in deps if "Comtrade" in d.get("dataSource", "")),
             "usgs_records": sum(1 for d in deps if "USGS" in d.get("dataSource", "")),
@@ -521,7 +521,8 @@ def health():
     return {
         "status": "ok",
         "rail": "Governance & Trust",
-        "data_sources": ["UN Comtrade (Live)", "USGS MRDS (Live)"],
+        "data_sources": ["mock_data.json (active — Comtrade 403, USGS not verified)"],
+        "note": "Live API adapters present but not active. All responses served from mock_data.json.",
         "cache_ttl_seconds": CACHE_TTL_SECONDS,
     }
 

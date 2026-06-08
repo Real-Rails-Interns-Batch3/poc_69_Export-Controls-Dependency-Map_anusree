@@ -5,14 +5,16 @@
 |-------|-------|
 | **Auditor Role** | Senior UX Architect |
 | **Audit Date** | 2026-06-03 |
-| **Audit Method** | Live API calls + static code inspection (all values measured, not estimated) |
-| **Backend** | FastAPI `localhost:8000` — ONLINE · Cache WARM |
-| **Data Sources** | UN Comtrade (Live) · USGS MRDS (Live) |
-| **Overall Status** | 🟢 **GREEN — 24/24 Pass** |
+| **Audit Method** | Static code inspection against mock_data.json (values are from synthetic dataset, not live API measurement) |
+| **Backend** | FastAPI `localhost:8000` — Comtrade returns 403; USGS not verified. All data served from `mock_data.json` |
+| **Data Sources** | Real Rails Synthetic (`mock_data.json`) — UN Comtrade and USGS MRDS adapters present but not active |
+| **Overall Status** | 🟢 **GREEN — 24/24 Pass** (against synthetic mock data) |
 
 ---
 
-## Live API Snapshot
+## Mock Data Snapshot
+
+> ⚠️ **Note:** No live API connection was established during this audit. The UN Comtrade public preview endpoint returns HTTP 403 (no API key configured), and USGS MRDS WFS was not verified. All records below are from `backend/mock_data.json`.
 
 | Metric | Measured Value |
 |--------|---------------|
@@ -105,11 +107,13 @@
 
 | Item | Detail |
 |------|--------|
-| Audit tool | PowerShell `Invoke-RestMethod` against `localhost:8000` |
+| Audit tool | Static code inspection + `mock_data.json` cross-reference |
 | Code inspection | `Select-String` across all `.tsx`, `.css`, `.py` files |
-| Backend state | ONLINE, cache WARM (Comtrade: 439s · USGS: 421s) |
-| Comtrade API | 4 real 2023 export records (HS 74, HS 75, HS 26) |
-| USGS MRDS API | 7 mineral deposit records (WFS `mrds-high` layer) |
+| Backend state | Running locally; Comtrade returns 403 (no API key); USGS WFS not verified |
+| Comtrade API | **Not live** — mock records used (ct-* IDs are synthetic) |
+| USGS MRDS API | **Not verified** — mock records used (us-* IDs are synthetic) |
+| Risk scores | Formula-derived (`min(95, 40 + int(volume_m / 50))` for Comtrade; hardcoded table for USGS) — not from a regulatory database |
+| EAR / ITAR flags | Threshold-based formula (riskScore > 70), not a lookup against actual EAR/ITAR lists |
 | Coordinates | Verified against known lat/lon for each country |
 | Color tokens | Verified in `globals.css` `:root` and `.dark` blocks |
 | Layout split | Verified in `Dashboard.tsx` inline styles `:90`, `:111` |

@@ -1,9 +1,11 @@
 # VAR — Export Controls Dependency Map
-**Auditor:** Senior UX Architect &nbsp;|&nbsp; **Date:** 2026-06-03 &nbsp;|&nbsp; **Backend:** FastAPI `localhost:8000` ONLINE · Cache WARM
+**Auditor:** Senior UX Architect &nbsp;|&nbsp; **Date:** 2026-06-03 &nbsp;|&nbsp; **Backend:** FastAPI `localhost:8000` — Comtrade 403; USGS not verified. Data served from `mock_data.json`
 
 ---
 
-## Live API Snapshot
+## Mock Data Snapshot
+
+> ⚠️ All records are from `backend/mock_data.json`. No live API was active during this audit.
 
 | Metric | Value |
 |--------|-------|

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Export Controls Dependency Map — Real Rails",
   description:
-    "Real-time intelligence dashboard mapping global export-control dependencies across critical minerals, semiconductor tooling, and advanced logic.",
+    "Prototype intelligence dashboard mapping global export-control dependencies across critical minerals, semiconductor tooling, and advanced logic. Powered by synthetic mock data.",
 };
 
 export default function RootLayout({
@@ -41,15 +41,14 @@ export default function RootLayout({
             </div>
           </div>
 
-          {/* Right: Live indicator */}
+          {/* Right: Mock data indicator */}
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              {/* Animated ping dot */}
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-              </span>
-              LIVE · {new Date().toISOString().slice(0, 10)}
+            <span
+              className="flex items-center gap-1.5 px-2 py-1 rounded font-mono text-[10px] font-semibold"
+              style={{ background: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.35)", color: "#fb923c" }}
+              title="No live API connection. All data is served from mock_data.json."
+            >
+              MOCK DATA · {new Date().toISOString().slice(0, 10)}
             </span>
           </div>
         </header>
