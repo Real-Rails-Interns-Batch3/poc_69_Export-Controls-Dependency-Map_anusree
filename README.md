@@ -115,8 +115,7 @@ npm run dev
 |--------------|--------------|-------------|--------|
 | **UN Comtrade** (`comtradeapi.un.org/data/v1/get`) |  Yes — `COMTRADE_API_KEY` | [comtradeplus.un.org](https://comtradeplus.un.org) → Subscribe → Primary Key |  Configured in `backend/.env` |
 | **USGS MRDS WFS** (`mrdata.usgs.gov/cgi-bin/mapserv`) |  No | Public US Gov endpoint |  No key needed |
-| **CartoBasemaps** (map tiles) |  No | Public CDN | No key needed |
-| **MapBox** |  No | N/A | `NEXT_PUBLIC_MAPBOX_TOKEN` is an unused legacy placeholder — basemap uses CartoBasemaps |
+
 
 
 ### `backend/.env`
