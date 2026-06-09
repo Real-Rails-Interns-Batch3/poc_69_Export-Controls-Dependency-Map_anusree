@@ -4,3 +4,5 @@ pandas
 geopandas
 pydantic
 httpx
+python-dotenv
+certifi

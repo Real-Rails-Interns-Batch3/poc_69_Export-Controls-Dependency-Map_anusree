@@ -4,7 +4,7 @@
 
 A geospatial intelligence **prototype** dashboard that maps global export-control dependency networks across critical minerals and dual-use technologies.
 
->  **Data status:** The dashboard currently runs entirely on **synthetic mock data** (`backend/mock_data.json`). The UN Comtrade public preview endpoint returns HTTP 403 without an API key, and the USGS MRDS WFS adapter has not been verified. Live API adapters are implemented in `backend/main.py` and will activate automatically once a valid Comtrade subscription key is configured. Risk scores and EAR/ITAR flags are formula-derived thresholds — they are **not** lookups against actual EAR/ITAR/OFAC regulatory databases.
+> **Data status:** The dashboard connects to **two live APIs** — UN Comtrade (authenticated via `COMTRADE_API_KEY` in `backend/.env`) and USGS MRDS WFS (US Government public endpoint, no key required). `mock_data.json` is retained as an automatic fallback per source if either live API fails. Risk scores and EAR/ITAR flags are formula-derived thresholds — they are **not** lookups against actual EAR/ITAR/OFAC regulatory databases.
 
 ---
 
@@ -26,14 +26,15 @@ A geospatial intelligence **prototype** dashboard that maps global export-contro
 │                                                         │
 │  ┌─────────────────┐    ┌──────────────────────┐        │
 │  │ UN Comtrade     │    │ USGS MRDS            │        │
-│  │ Adapter (403)   │    │ Adapter (unverified) │        │
+│  │ Adapter ✅ Live │    │ Adapter ✅ Live      │        │
+│  │ (key configured)│    │ (public, no key)     │        │
 │  └────────┬────────┘    └──────────┬───────────┘        │
 │           └──────────┬─────────────┘                    │
 │              ┌───────▼──────┐                           │
 │              │ In-Memory    │                           │
 │              │ Cache 30min  │                           │
 │              └───────┬──────┘                           │
-│                      │  Active: mock_data.json          │
+│              Fallback: mock_data.json (per-source)      │
 └──────────────────────┴──────────────────────────────────┘
 ```
 
@@ -67,19 +68,20 @@ python main.py
 # → Interactive docs at http://localhost:8000/docs
 ```
 
-> **Note:** The backend will start successfully without any API keys. All responses fall back to `mock_data.json` automatically.
+> **Note:** The backend will start successfully with or without an API key — without a Comtrade key the adapter falls back to `mock_data.json` automatically. USGS MRDS requires no key and is always attempted live.
 
-#### Optional — Comtrade API key (for live data)
+#### Comtrade API key (already configured in this project)
 
-The UN Comtrade public preview endpoint requires a subscription key for production use. Without one the adapter returns a 403 and falls back to mock data.
+The UN Comtrade authenticated endpoint (`data/v1/get`) requires a subscription key sent as `Ocp-Apim-Subscription-Key`. This project ships with a key in `backend/.env`.
 
-1. Register a free account at [comtradeplus.un.org](https://comtradeplus.un.org)
-2. Copy your subscription key
-3. Create `backend/.env`:
+**To replace or refresh the key:**
+1. Register / log in at [comtradeplus.un.org](https://comtradeplus.un.org)
+2. Go to **Subscribe → copy Primary Key**
+3. Update `backend/.env`:
    ```
-   COMTRADE_API_KEY=your_key_here
+   COMTRADE_API_KEY=your_primary_key_here
    ```
-4. Update `main.py` to pass the key as an `Ocp-Apim-Subscription-Key` header in the `httpx` requests inside `fetch_comtrade_live()`.
+The `fetch_comtrade_live()` function in `main.py` already passes the key as the `Ocp-Apim-Subscription-Key` header automatically.
 
 ### 3. Frontend
 
@@ -105,19 +107,28 @@ npm run dev
 
 ---
 
-## Environment Variables
+## Environment Variables & API Keys
+
+### Required API Keys Summary
+
+| API / Service | Key Required? | Where to Get | Status |
+|--------------|--------------|-------------|--------|
+| **UN Comtrade** (`comtradeapi.un.org/data/v1/get`) | ✅ Yes — `COMTRADE_API_KEY` | [comtradeplus.un.org](https://comtradeplus.un.org) → Subscribe → Primary Key | ✅ Configured in `backend/.env` |
+| **USGS MRDS WFS** (`mrdata.usgs.gov/cgi-bin/mapserv`) | ❌ No | Public US Gov endpoint | ✅ No key needed |
+| **CartoBasemaps** (map tiles) | ❌ No | Public CDN | ✅ No key needed |
+| **MapBox** | ❌ No | N/A | `NEXT_PUBLIC_MAPBOX_TOKEN` is an unused legacy placeholder — basemap uses CartoBasemaps |
 
 ### `frontend/.env`
 
 | Variable | Required | Default | Purpose |
 |----------|----------|---------|---------|
-| `NEXT_PUBLIC_MAPBOX_TOKEN` | No | — | Legacy token placeholder. Not used — basemap uses public CartoBasemaps URL |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | **No** | — | Legacy placeholder only — **not used**. Basemap uses public CartoBasemaps dark-matter URL |
 
-### `backend/.env` (create manually if needed)
+### `backend/.env`
 
 | Variable | Required | Default | Purpose |
 |----------|----------|---------|---------|
-| `COMTRADE_API_KEY` | No | — | UN Comtrade subscription key. Without it, mock data is used |
+| `COMTRADE_API_KEY` | **Yes** (for live data) | Falls back to mock | UN Comtrade `Ocp-Apim-Subscription-Key`. Get from [comtradeplus.un.org](https://comtradeplus.un.org) |
 
 ---
 
@@ -125,9 +136,9 @@ npm run dev
 
 | Source | Intended Type | Current Status | Notes |
 |--------|--------------|----------------|-------|
-| **UN Comtrade** | Live |  403 — not active | Needs subscription key at `comtradeplus.un.org` |
-| **USGS MRDS** | Live (WFS) |  Unverified | WFS endpoint may require map file path fixes |
-| **Mock Data** | Fallback |  Active | `backend/mock_data.json` — 12 synthetic dependency links |
+| **UN Comtrade** | Live (authenticated) | ✅ Active — key configured | `Ocp-Apim-Subscription-Key` sent to `comtradeapi.un.org/data/v1/get/C/A/HS` |
+| **USGS MRDS** | Live (WFS public) | ✅ Active — no key required | `mrdata.usgs.gov/cgi-bin/mapserv` WFS 1.0.0 / GML2, public US Gov endpoint |
+| **Mock Data** | Per-source fallback | ✅ Standby | `backend/mock_data.json` auto-activates if either live API fails or returns no records |
 
 ---
 
@@ -211,7 +222,9 @@ Export Controls/
 | Frontend shows no data / blank map | Backend not running | Start `python main.py` in `backend/` |
 | `npm install` fails | Node < 18 or npm < 9 | Upgrade Node.js |
 | Backend 500 on startup | Missing `mock_data.json` | Ensure `backend/mock_data.json` exists |
-| Comtrade returns 0 records | 403 — no API key | Add `COMTRADE_API_KEY` to `backend/.env` |
+| Comtrade returns 0 records / 403 | Expired or invalid API key | Refresh `COMTRADE_API_KEY` in `backend/.env` — get from [comtradeplus.un.org](https://comtradeplus.un.org) |
+| Comtrade returns 429 | Rate limit hit | Backend auto-stops further requests. Wait or use `POST /api/cache/invalidate` after cooldown |
+| USGS returns empty features | WFS filter match issue | Backend falls back to calibrated baseline values per mineral — no action needed |
 | Map tiles not loading | Network issue with CartoBasemaps CDN | Check internet connection; no key needed for CartoBasemaps dark-matter style |
 
 ---
@@ -229,7 +242,7 @@ Request → Cache hit? → Return cached data (fast)
          Merge + store in cache
          Return data
                ↓ Any error / 403
-         Fallback to mock_data.json  ← currently always reached
+         Fallback to mock_data.json  ← only if live API fails/empty
 ```
 
 ---

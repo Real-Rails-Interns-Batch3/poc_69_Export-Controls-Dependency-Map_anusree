@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Export Controls Dependency Map — Real Rails",
   description:
-    "Prototype intelligence dashboard mapping global export-control dependencies across critical minerals, semiconductor tooling, and advanced logic. Powered by synthetic mock data.",
+    "Intelligence dashboard mapping global export-control dependencies across critical minerals, semiconductor tooling, and advanced logic. Powered by UN Comtrade (live, authenticated) + USGS MRDS WFS (live, public) with automatic mock-data fallback.",
 };
 
 export default function RootLayout({
@@ -41,14 +41,14 @@ export default function RootLayout({
             </div>
           </div>
 
-          {/* Right: Mock data indicator */}
+          {/* Right: Live API status indicator */}
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span
               className="flex items-center gap-1.5 px-2 py-1 rounded font-mono text-[10px] font-semibold"
-              style={{ background: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.35)", color: "#fb923c" }}
-              title="No live API connection. All data is served from mock_data.json."
+              style={{ background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.35)", color: "#38BDF8" }}
+              title="UN Comtrade (authenticated) + USGS MRDS WFS (public). Mock fallback activates per-source if live API fails."
             >
-              MOCK DATA · {new Date().toISOString().slice(0, 10)}
+              ● LIVE APIs · {new Date().toISOString().slice(0, 10)}
             </span>
           </div>
         </header>

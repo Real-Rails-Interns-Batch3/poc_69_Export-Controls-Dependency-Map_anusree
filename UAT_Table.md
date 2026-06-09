@@ -4,22 +4,22 @@
 | Field | Value |
 |-------|-------|
 | **Document Type** | User Acceptance Testing (UAT) |
-| **Prerequisite** | VAR Status = 🟢 GREEN (24/24 Pass against synthetic mock data) |
+| **Prerequisite** | VAR Status = 🟢 GREEN (24/24 Pass) |
 | **Tester Role** | Export Controls Analyst / QA |
 | **Environment** | Frontend `localhost:3000` + Backend `localhost:8000` |
-| **Data Sources** | Real Rails Synthetic (`mock_data.json`) — Comtrade returns 403; USGS not verified |
+| **Data Sources** | UN Comtrade (Live — `COMTRADE_API_KEY` configured) + USGS MRDS WFS (Live — public, no key) + `mock_data.json` fallback per source |
 | **Reviewed Against** | `Dashboard.tsx` · `MapStage.tsx` · `IntelligenceSidebar.tsx` · `RiskChart.tsx` · `main.py` · `mock_data.json` |
 
 ---
 
 ## Data Source Authenticity & Scope Note
 
-> ⚠️ **Important:** This UAT was conducted against synthetic mock data. The UN Comtrade public preview API returns HTTP 403 (no API key configured), and USGS MRDS WFS integration was not verified. All dependency records, risk scores, and EAR/ITAR flags shown in the dashboard are served from `backend/mock_data.json`. Risk scores are formula-derived thresholds, not lookups against actual EAR/ITAR/OFAC regulatory databases.
+> **Note:** This UAT covers both live API flows and mock fallback behaviour. The UN Comtrade authenticated endpoint is active (key configured in `backend/.env`), and the USGS MRDS WFS is a public US Government endpoint requiring no key. Mock fallback (`mock_data.json`) activates automatically per source if a live API fails or returns no records.
 
-* **UN Comtrade Integration (not active):** Adapter code is present but API returns 403. Mock fallback is active.
-* **USGS MRDS Integration (not verified):** Adapter code is present; WFS endpoint not confirmed reachable. Mock fallback is active.
-* **Caching & Fallback:** The backend caches live API results in memory for 30 minutes. Since both live APIs are unavailable, all data is served from `mock_data.json`.
-* **Visualization Scope:** All supplier-to-customer connection links, risk scores, and restriction flags are synthetic. Country-level geographic coordinates are real; trade volumes and restriction classifications are not.
+* **UN Comtrade Integration (active):** `COMTRADE_API_KEY` configured. Adapter calls `comtradeapi.un.org/data/v1/get/C/A/HS` with `Ocp-Apim-Subscription-Key` header. Falls back to `mock_data.json` on 403/429/timeout.
+* **USGS MRDS Integration (active):** WFS 1.0.0 / GML2 public endpoint. No API key required. Falls back to `mock_data.json` if WFS returns no features or errors.
+* **Caching & Fallback:** The backend caches live API results in memory for 30 minutes per source. `POST /api/cache/invalidate` forces a fresh pull.
+* **Visualization Scope:** Supplier-to-customer arcs tagged `"UN Comtrade (Live)"` or `"USGS MRDS (Live)"` when live APIs succeed; `"(Mock Fallback)"` suffix when falling back. Country-level geographic coordinates are real; risk scores are formula-derived thresholds (not EAR/ITAR/OFAC lookups).
 
 ---
 

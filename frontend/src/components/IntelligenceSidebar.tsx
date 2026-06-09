@@ -170,20 +170,30 @@ export default function IntelligenceSidebar({
           </div>
         </div>
         <p className="text-[9px] text-muted-foreground mt-2.5 font-mono">{kpis?.dataAsOf}</p>
-        {/* VAR 3.9 — Live record count badges */}
+        {/* Live / Mock status badges */}
         {kpis?.sources && (
           <div className="flex gap-2 mt-1.5 flex-wrap">
             <span
-              className="text-[8px] px-1.5 py-0.5 rounded font-mono"
-              style={{ background: "rgba(56,189,248,0.08)", color: "#38BDF8", border: "1px solid rgba(56,189,248,0.2)" }}
+              className="text-[8px] px-1.5 py-0.5 rounded font-mono flex items-center gap-1"
+              style={{
+                background: (kpis.sources as any).comtrade_live ? "rgba(56,189,248,0.08)" : "rgba(107,114,128,0.08)",
+                color: (kpis.sources as any).comtrade_live ? "#38BDF8" : "#6b7280",
+                border: `1px solid ${ (kpis.sources as any).comtrade_live ? "rgba(56,189,248,0.2)" : "rgba(107,114,128,0.2)" }`,
+              }}
             >
-              Comtrade: {(kpis.sources as any).comtrade_records ?? 0} records
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: (kpis.sources as any).comtrade_live ? "#38BDF8" : "#6b7280", display: "inline-block" }} />
+              Comtrade: {(kpis.sources as any).comtrade_records ?? 0}r {(kpis.sources as any).comtrade_live ? "● Live" : "◌ Mock"}
             </span>
             <span
-              className="text-[8px] px-1.5 py-0.5 rounded font-mono"
-              style={{ background: "rgba(129,140,248,0.08)", color: "#818CF8", border: "1px solid rgba(129,140,248,0.2)" }}
+              className="text-[8px] px-1.5 py-0.5 rounded font-mono flex items-center gap-1"
+              style={{
+                background: (kpis.sources as any).usgs_live ? "rgba(129,140,248,0.08)" : "rgba(107,114,128,0.08)",
+                color: (kpis.sources as any).usgs_live ? "#818CF8" : "#6b7280",
+                border: `1px solid ${ (kpis.sources as any).usgs_live ? "rgba(129,140,248,0.2)" : "rgba(107,114,128,0.2)" }`,
+              }}
             >
-              USGS: {(kpis.sources as any).usgs_records ?? 0} records
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: (kpis.sources as any).usgs_live ? "#818CF8" : "#6b7280", display: "inline-block" }} />
+              USGS: {(kpis.sources as any).usgs_records ?? 0}r {(kpis.sources as any).usgs_live ? "● Live" : "◌ Mock"}
             </span>
           </div>
         )}
@@ -298,8 +308,47 @@ export default function IntelligenceSidebar({
         </div>
       </div>
 
-      {/* ─── SECTION E: Download ─────────────────────────────── */}
+      {/* ─── SECTION E: Source Status + Download ──────────────── */}
       <div className="flex-none p-5">
+
+        {/* Data source status cards */}
+        {data.sourceLabels?.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-2 py-1 mb-2">
+              <div className="h-px flex-1" style={{ background: "#1F2937" }} />
+              <span className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap px-1">Data Sources</span>
+              <div className="h-px flex-1" style={{ background: "#1F2937" }} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {data.sourceLabels.map((src: any) => (
+                <div
+                  key={src.id}
+                  className="flex items-center justify-between rounded-md px-2.5 py-2"
+                  style={{
+                    background: "rgba(11,17,23,0.7)",
+                    border: `1px solid ${src.live ? src.color + "40" : "#1F2937"}`,
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: src.live ? src.color : "#374151", display: "inline-block", flexShrink: 0 }} />
+                    <span className="text-[10px] font-semibold" style={{ color: src.live ? src.color : "#6b7280" }}>{src.name}</span>
+                  </div>
+                  <span
+                    className="text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
+                    style={{
+                      background: src.live ? `${src.color}18` : "rgba(107,114,128,0.12)",
+                      color: src.live ? src.color : "#6b7280",
+                      border: `1px solid ${src.live ? src.color + "40" : "rgba(107,114,128,0.2)"}`,
+                    }}
+                  >
+                    {src.type}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={downloadSampleData}
           className="w-full py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2"
@@ -318,12 +367,12 @@ export default function IntelligenceSidebar({
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
-          Download Sample Data
+          Download Data
           <span className="text-[10px] text-muted-foreground font-normal ml-1">(JSON)</span>
         </button>
         <p className="text-[9px] text-muted-foreground text-center mt-3 leading-relaxed">
-          Sources: UN Comtrade &amp; USGS MRDS.<br />
-          Supplier–customer links are synthetic mock data.
+          Sources: UN Comtrade API + USGS MRDS WFS.<br />
+          Strategic insights are expert-curated content.
         </p>
       </div>
     </div>
