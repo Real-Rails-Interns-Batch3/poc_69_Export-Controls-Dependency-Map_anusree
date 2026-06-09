@@ -26,7 +26,7 @@ A geospatial intelligence **prototype** dashboard that maps global export-contro
 │                                                         │
 │  ┌─────────────────┐    ┌──────────────────────┐        │
 │  │ UN Comtrade     │    │ USGS MRDS            │        │
-│  │ Adapter ✅ Live │    │ Adapter ✅ Live      │        │
+│  │ Adapter - Live │    │ Adapter - Live      │        │
 │  │ (key configured)│    │ (public, no key)     │        │
 │  └────────┬────────┘    └──────────┬───────────┘        │
 │           └──────────┬─────────────┘                    │
@@ -113,16 +113,11 @@ npm run dev
 
 | API / Service | Key Required? | Where to Get | Status |
 |--------------|--------------|-------------|--------|
-| **UN Comtrade** (`comtradeapi.un.org/data/v1/get`) | ✅ Yes — `COMTRADE_API_KEY` | [comtradeplus.un.org](https://comtradeplus.un.org) → Subscribe → Primary Key | ✅ Configured in `backend/.env` |
-| **USGS MRDS WFS** (`mrdata.usgs.gov/cgi-bin/mapserv`) | ❌ No | Public US Gov endpoint | ✅ No key needed |
-| **CartoBasemaps** (map tiles) | ❌ No | Public CDN | ✅ No key needed |
-| **MapBox** | ❌ No | N/A | `NEXT_PUBLIC_MAPBOX_TOKEN` is an unused legacy placeholder — basemap uses CartoBasemaps |
+| **UN Comtrade** (`comtradeapi.un.org/data/v1/get`) |  Yes — `COMTRADE_API_KEY` | [comtradeplus.un.org](https://comtradeplus.un.org) → Subscribe → Primary Key |  Configured in `backend/.env` |
+| **USGS MRDS WFS** (`mrdata.usgs.gov/cgi-bin/mapserv`) |  No | Public US Gov endpoint |  No key needed |
+| **CartoBasemaps** (map tiles) |  No | Public CDN | No key needed |
+| **MapBox** |  No | N/A | `NEXT_PUBLIC_MAPBOX_TOKEN` is an unused legacy placeholder — basemap uses CartoBasemaps |
 
-### `frontend/.env`
-
-| Variable | Required | Default | Purpose |
-|----------|----------|---------|---------|
-| `NEXT_PUBLIC_MAPBOX_TOKEN` | **No** | — | Legacy placeholder only — **not used**. Basemap uses public CartoBasemaps dark-matter URL |
 
 ### `backend/.env`
 
@@ -136,9 +131,9 @@ npm run dev
 
 | Source | Intended Type | Current Status | Notes |
 |--------|--------------|----------------|-------|
-| **UN Comtrade** | Live (authenticated) | ✅ Active — key configured | `Ocp-Apim-Subscription-Key` sent to `comtradeapi.un.org/data/v1/get/C/A/HS` |
-| **USGS MRDS** | Live (WFS public) | ✅ Active — no key required | `mrdata.usgs.gov/cgi-bin/mapserv` WFS 1.0.0 / GML2, public US Gov endpoint |
-| **Mock Data** | Per-source fallback | ✅ Standby | `backend/mock_data.json` auto-activates if either live API fails or returns no records |
+| **UN Comtrade** | Live (authenticated) |  Active — key configured | `Ocp-Apim-Subscription-Key` sent to `comtradeapi.un.org/data/v1/get/C/A/HS` |
+| **USGS MRDS** | Live (WFS public) |  Active — no key required | `mrdata.usgs.gov/cgi-bin/mapserv` WFS 1.0.0 / GML2, public US Gov endpoint |
+| **Mock Data** | Per-source fallback |  Standby | `backend/mock_data.json` auto-activates if either live API fails or returns no records |
 
 ---
 
@@ -185,33 +180,6 @@ Interactive API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## Project Structure
-
-```
-Export Controls/
-├── backend/
-│   ├── main.py              # FastAPI app + Comtrade & USGS adapters
-│   ├── mock_data.json        # Active synthetic fallback data (12 links)
-│   └── requirements.txt
-├── frontend/
-│   ├── .env                 # Environment variable template
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── globals.css   # Design DNA (tokens, utilities)
-│   │   │   ├── layout.tsx
-│   │   │   └── page.tsx
-│   │   ├── components/
-│   │   │   ├── Dashboard.tsx         # 70/30 layout orchestrator
-│   │   │   ├── MapStage.tsx          # DeckGL geo visualization
-│   │   │   ├── IntelligenceSidebar.tsx # Filters + KPIs + insights
-│   │   │   └── RiskChart.tsx         # Recharts bar chart
-│   │   └── lib/utils.ts
-│   ├── next.config.ts
-│   └── package.json
-├── VAR_Report.md             # Visualization Audit Report (against mock data)
-├── UAT_Table.md              # Functional UAT (against mock data)
-└── README.md
-```
 
 ---
 
