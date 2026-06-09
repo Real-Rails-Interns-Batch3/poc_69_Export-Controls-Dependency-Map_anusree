@@ -61,7 +61,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [dependencies, insights, countryCompare, commodities, mitigations, kpis, sourceLabels] =
+      // Step 1 — fetch dependencies first (this call populates _source_status on the backend).
+      // source-labels must NOT run in parallel: it reads _source_status which starts as "unknown"
+      // and would always show "Mock Fallback" if fetched before the live API calls complete.
+      const [dependencies, insights, countryCompare, commodities, mitigations, kpis] =
         await Promise.all([
           safeFetch(`${API}/api/dependencies`, []),
           safeFetch(`${API}/api/insights`, {}),
@@ -69,8 +72,11 @@ export default function Dashboard() {
           safeFetch(`${API}/api/risk-scores`, []),
           safeFetch(`${API}/api/mitigations`, []),
           safeFetch(`${API}/api/stats`, {}),
-          safeFetch(`${API}/api/source-labels`, []),
         ]);
+
+      // Step 2 — now that _source_status is set (live or mock), fetch source-labels accurately.
+      const sourceLabels = await safeFetch(`${API}/api/source-labels`, []);
+
       setData({ dependencies, insights, countryCompare, commodities, mitigations, kpis, sourceLabels });
       setLoading(false);
     };

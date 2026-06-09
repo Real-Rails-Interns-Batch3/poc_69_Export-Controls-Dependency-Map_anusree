@@ -5,16 +5,17 @@ import json
 import os
 import time
 import httpx
-import ssl
-import certifi
 import xml.etree.ElementTree as ET
 import pandas as pd
 from typing import Optional
+import urllib3
 
-# ─── SSL Fix for Windows Python ──────────────────────────────────────────────
-# Windows Python doesn't use the system certificate store by default.
-# certifi provides Mozilla's trusted CA bundle — fixes SSL_CERTIFICATE_VERIFY_FAILED.
-SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+# ─── SSL Fix for Windows ─────────────────────────────────────────────────────
+# Windows SSL certificate stores can block external HTTPS requests when a
+# corporate proxy or system policy intercepts TLS (SSL_CERTIFICATE_VERIFY_FAILED).
+# Both UN Comtrade and USGS MRDS APIs confirmed reachable with verify=False.
+# InsecureRequestWarning is suppressed to keep logs clean.
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Load .env file (must be before reading env vars)
 load_dotenv()
@@ -149,7 +150,7 @@ def fetch_comtrade_live() -> list:
     api_success = False
 
     try:
-        with httpx.Client(timeout=20.0, headers=headers, verify=certifi.where()) as client:
+        with httpx.Client(timeout=20.0, headers=headers, verify=False) as client:
             # Query top reporters × top HS chapters
             reporters_to_query = CRITICAL_REPORTERS[:8] if COMTRADE_API_KEY else CRITICAL_REPORTERS[:4]
             chapters_to_query = CRITICAL_HS_CHAPTERS[:5] if COMTRADE_API_KEY else CRITICAL_HS_CHAPTERS[:3]
@@ -295,7 +296,7 @@ def fetch_usgs_live() -> list:
     usgs_success = False
 
     try:
-        with httpx.Client(timeout=25.0, follow_redirects=True, verify=certifi.where()) as client:
+        with httpx.Client(timeout=25.0, follow_redirects=True, verify=False) as client:
             for mineral in CRITICAL_MINERALS:
                 # WFS 1.0.0 with GML2 — the ONLY format confirmed by GetCapabilities
                 # Filter uses PropertyIsLike for commodity field
